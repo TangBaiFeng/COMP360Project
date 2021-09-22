@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title>COMP  490-01  Program Design and Analysis in Ada   Fall 1996</title>
+	<meta name="generator" content="LibreOffice 6.4.7.2 (Linux)"/>
+	<meta name="author" content="Huiming Yu"/>
+	<meta name="created" content="2021-08-30T15:25:00"/>
+	<meta name="changed" content="2021-09-22T09:29:14.863031313"/>
+	<style type="text/css">
+		@page { size: 8.5in 11in; margin: 1in }
+		p { direction: ltr; color: #000000; orphans: 0; widows: 0; background: transparent }
+		p.western { font-family: "Times New Roman", serif; font-size: 12pt; so-language: en-US }
+		p.cjk { font-family: "Times New Roman", serif; font-size: 12pt }
+		p.ctl { font-family: "Times New Roman", serif; font-size: 10pt; so-language: ar-SA }
+		h1 { direction: ltr; color: #000000; text-align: center; orphans: 0; widows: 0; background: transparent; page-break-after: avoid }
+		h1.western { font-family: "Times New Roman", serif; font-size: 16pt; so-language: en-US; font-weight: bold }
+		h1.cjk { font-family: "Times New Roman", serif; font-size: 16pt; font-weight: bold }
+		h1.ctl { font-family: "Times New Roman", serif; font-size: 10pt; so-language: ar-SA }
+	</style>
+</head>
+<body lang="en-US" text="#000000" link="#000080" vlink="#800000" dir="ltr"><p class="western" align="center">
+<font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="4" style="font-size: 16pt"><b>&shy;</b></font></font><font face="Times New Roman, serif"><font size="4" style="font-size: 16pt"><b>	</b></font></font><font face="Times New Roman, serif"><font size="4" style="font-size: 14pt"><b>COMP
+ 360-01  Programming Languages   Fall 2021</b></font></font></font></font></p>
+<p class="western"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>	</b></font></font></p>
+<h1 class="western"><font size="3" style="font-size: 12pt">Project 1</font></h1>
+<h1 class="western"></h1>
+<h1 class="western"><font size="3" style="font-size: 12pt">Due Date:
+October 3</font></h1>
+<p class="western"><br/>
+
+</p>
+<p class="western" align="justify" style="orphans: 2; widows: 2"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt"><b>Objective:
+</b></span></font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt">Learn
+programming</span></font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt">
+language implementation systems. Practice conduction syntax analysis
+on given program components.</span></font></font></font></font></p>
+<p class="western" align="justify" style="letter-spacing: -0.2pt; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p class="western" align="justify" style="orphans: 2; widows: 2"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>Assignment:</b></font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">
+Language implementation systems must input a file, identify
+substrings, and find all syntax errors, </font></font><font color="#000000"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">r</font></font></font><font color="#000000"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">egardless
+of the specific implementation approach</font></font></font><font color="#000000"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt">.
+For an </span></font></font></font><font color="#000000"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">input
+program a lexical analyzer will break a file into lexemes and tokens.
+A parser will find </font></font></font><font color="#000000"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">all
+syntax errors. For each error the parser will produce an appropriate
+diagnostic message, and recover quickly.</font></font></font></font></font></p>
+<p class="western" align="justify" style="display: none"><br/>
+
+</p>
+<p class="western" align="justify"><br/>
+
+</p>
+<p class="western" align="justify"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font color="#000000"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">For
+the </font></font></font><font color="#000000"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>Simple
+Demo Function</b></font></font></font><font color="#000000"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">
+defined as follows: </font></font></font></font></font>
+</p>
+<p align="justify" style="letter-spacing: -0.2pt"><font color="#000000">choose</font>
+a programming language (C, C++, or Java) that you are familiar with,
+to implement a lexical analyzer and a top-down parser. The lexical
+analyzer will read the test program and generate lexemes with token
+types. The parser must use the recursive-descent parsing to implement
+the syntax analysis. The project must implement the following
+functions:</p>
+<p class="western" align="justify" style="letter-spacing: -0.2pt"><br/>
+
+</p>
+<ol>
+	<li><p class="western" align="justify"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt">Input
+	the test program.</span></font></font></font></font></p>
+	<li><p class="western" align="justify"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt">Use
+	the Lexical Analyzer to generate lexemes and tokens, and display
+	them.</span></font></font></font></font></p>
+	<li><p class="western" align="justify"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt">Use
+	the recursive-descent parser to check the syntax of the test
+	program.</span></font></font></font></font></p>
+	<li><p class="western" align="justify"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt">If
+	the test program is generated by the </span></font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt"><b>Simple
+	Demo Function</b></span></font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt">
+	display “The test program is generated by the BNF grammar”,
+	otherwise display “The test program cannot be generated by the
+	Simple Demo Function BNF Grammar” and identify the syntax error.</span></font></font></font></font></p>
+</ol>
+<p class="western" style="letter-spacing: -0.2pt"><br/>
+
+</p>
+<p class="western"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><b>Requirements:</b></font></font></p>
+<ol>
+	<ul>
+		<li><p class="western" align="justify" style="orphans: 2; widows: 2">
+		<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">This
+		is a two person team project.  </font></font>
+		</p>
+		<li><p class="western" align="justify" style="orphans: 2; widows: 2">
+		<font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Your
+		team must use department programming standards.</font></font></font></font></p>
+		<li><p class="western" align="justify" style="orphans: 2; widows: 2">
+		<font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">The
+		program must execute correctly.</font></font></p>
+		<li><p class="western" align="justify" style="orphans: 2; widows: 2">
+		<font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Email
+		your program to</font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">
+		zliu2</font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">@aggies.ncat.edu.</font></font></font></font></p>
+	</ul>
+</ol>
+<p class="western" align="justify" style="letter-spacing: -0.2pt"><br/>
+
+</p>
+<p class="western" align="justify"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt">EBNF
+grammar for </span></font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt"><b>Simple
+</b></span></font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt"><b>Demo
+Function</b></span></font></font><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: -0.2pt">:</span></font></font></font></font></p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">&lt;program&gt;
+	-&gt; 	&lt;keyword&gt; &lt;ident&gt; (&lt;keyword&gt;&lt;ident&gt;)
+{ &lt;declares&gt; &lt;assign&gt;}</font></font></font></font></p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">&lt;declares&gt;	-&gt;
+    	&lt;keyword&gt; &lt;ident&gt; ;</font></font></font></font></p>
+<p class="western"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">		|
+     	&lt;keyword&gt; &lt;ident&gt; ; &lt;declares&gt;</font></font></p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">&lt;assign&gt;	-&gt;
+  	&lt;ident&gt; = &lt;expr&gt;    </font></font></font></font>
+</p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">&lt;expr&gt;		-&gt;
+	&lt;ident&gt; {*|/} &lt;expr&gt;</font></font></font></font></p>
+<p class="western" style="margin-left: 0.5in; text-indent: 0.5in">
+<font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">|	&lt;ident&gt;</font></font></font></font></p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">&lt;keyword&gt;	-&gt;
+    	int</font></font></font></font></p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">&lt;ident&gt;
+	-&gt; 	a &lt;ident&gt;| b&lt;ident&gt; … | z &lt;ident&gt; |  </font></font><font face="Symbol, serif"><font size="3" style="font-size: 12pt">e</font></font></font></font></p>
+<p class="western"><br/>
+
+</p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Test
+your program using the following test programs as input files.  </font></font></font></font>
+</p>
+<p class="western"><br/>
+
+</p>
+<p class="western" style="page-break-before: always"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">First
+test program</font></font></p>
+<p class="western"><br/>
+
+</p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">int
+test1 (int m){</font></font></font></font></p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">int
+n;</font></font></font></font></p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">int
+p;</font></font></font></font></p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">int
+res;</font></font></font></font></p>
+<p class="western"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">res
+= n / p * m;</font></font></font></font></p>
+<p class="western"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">}</font></font></p>
+<p class="western" align="justify" style="letter-spacing: -0.2pt"><br/>
+
+</p>
+<p class="western" align="justify" style="letter-spacing: -0.2pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">Second
+test program</font></font></p>
+<p class="western" align="justify" style="letter-spacing: -0.2pt"><br/>
+
+</p>
+<p class="western" align="justify"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">int
+test2 () {</font></font></font></font></p>
+<p class="western" align="justify"><font face="Courier, Courier New, monospace"><font size="2" style="font-size: 10pt"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">p
+= m * c;</font></font></font></font></p>
+<p class="western" align="justify"><font face="Times New Roman, serif"><font size="3" style="font-size: 12pt">}</font></font></p>
+<p class="western" align="justify"><br/>
+
+</p>
+</body>
+</html>

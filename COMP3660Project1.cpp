@@ -1,30 +1,56 @@
 /**
  * @brief We will input a file, indentify the substrings and find all syntax errors
- * 
+ *
  */
 #include<iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+
 using namespace std;
 /**
  * @brief Lexical Analyzer to generate lexemes and tokens, and display them.
- * 
+ *
  */
 void lexicalAnalyzer();
 /**
  * @brief recursive-descent parser to check the syntax of the test program.
- * 
+ *
  */
 void topDownParser();
-int main(int argc, char const *argv[])
-{
+/**
+ * @brief Takes the file location input and stores all the elements into a vector
+ *
+ * @param fileName the name of the file
+ */
+void readFile(string fileName);
+// List of words broken up by the readFile
+vector <string> wordList;
+int main(int argc, char const* argv[]) {
     /* code */
     return 0;
 }
 
-void lexicalAnalyzer(){
+void lexicalAnalyzer() {
 
 }
-void topDownParser(){
-    
+void topDownParser() {
+
+}
+void readFile(string fileName) {
+    string line;
+    ifstream myFile(fileName);
+    if (myFile.is_open()) {
+        while (getline(myFile, line)) {
+            wordList.push_back(line);
+        }
+    }
+    else {
+        cout << "Unable to open file";
+        exit(1);
+    }
+
+
 }
 
 
