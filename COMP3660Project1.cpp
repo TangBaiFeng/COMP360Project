@@ -2,7 +2,7 @@
  * @brief We will input a file, indentify the substrings and find all syntax errors
  *
  */
-#include<iostream>
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
