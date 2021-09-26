@@ -13,6 +13,13 @@ using namespace std;
  *
  */
 void lexicalAnalyzer();
+
+bool isOperator(string input);  // Checks if string is an operator
+
+bool isKeyword(string input);   // Checks if string is a keyword
+
+string punctuatorFind(string input); // Checks if string is a constant
+
 /**
  * @brief recursive-descent parser to check the syntax of the test program.
  *
@@ -24,24 +31,67 @@ void topDownParser();
  * @param fileName the name of the file
  */
 void readFile(string fileName);
+
 // List of words broken up by the readFile
 vector <string> wordList;
 int main(int argc, char const* argv[]) {
     /* code */
+    readFile("test1.txt");
+    //tempTest();
+    lexicalAnalyzer();
     return 0;
 }
 
 void lexicalAnalyzer() {
-
+    string analyze;
+    for (int i = 0; i < wordList.size() - 1; i++) {
+        analyze = punctuatorFind(wordList[i]);
+        if (isKeyword(analyze) == true) {
+            cout << analyze << " is a keyword." << endl;
+        }
+        else if (isOperator(analyze) == true) {
+            cout << analyze << " is an operator." << endl;
+        }
+        else if (isalpha(analyze[0])) {
+            cout << analyze << " is an identifier." << endl;
+        }
+    }
 }
+
+bool isOperator(string input) {
+    if (input == "+" || input == "-" || input == "/" || input == "%" || input == "*" || input == "=")
+        return false;
+}
+
+bool isKeyword(string input) {
+    if ((input == "int") || (input == "string") || (input == "double") || (input == "bool")) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+string punctuatorFind(string input) {
+    for (int i = 0; i < input.size() - 1; i++) {
+        if ((input[i] == '{') || (input[i] == '}') || (input[i] == '(') || (input[i] == ')') ||
+            (input[i] == '&') || (input[i] == '|')) {
+            cout << input[i] << " is a punctuator." << endl;
+            input.erase(input.begin() + i);
+        }
+        return input;
+    }
+}
+
 void topDownParser() {
-
+  
 }
+
 void readFile(string fileName) {
     string line;
     ifstream myFile(fileName);
     if (myFile.is_open()) {
-        while (getline(myFile, line)) {
+        while (getline(myFile, line, ' ')) {
             wordList.push_back(line);
         }
     }
@@ -49,10 +99,13 @@ void readFile(string fileName) {
         cout << "Unable to open file";
         exit(1);
     }
-
-
 }
 
+void tempTest() {
+     for (int i = 0; i < wordList.size() - 1; i++) {
+        cout << wordList[i] << endl;
+    }
+}
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
