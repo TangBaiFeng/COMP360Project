@@ -1,5 +1,7 @@
 /**
- * @brief We will input a file, indentify the substrings and find all syntax errors
+ * @brief We will input a file, identify the substrings and find all syntax errors
+ * @author Stephen Witley???
+ * @author Troy Boone
  *
  */
 #include <iostream>
@@ -17,8 +19,13 @@ void lexicalAnalyzer();
 bool isOperator(string input);  // Checks if string is an operator
 
 bool isKeyword(string input);   // Checks if string is a keyword
-
-string punctuatorFind(string input); // Checks if string is a constant
+/**
+ * @brief Iterates through string and pulls out punctuation
+ *
+ * @param input unclean string
+ * @return cleaned string
+ */
+string punctuatorFind(string input); // 
 
 /**
  * @brief recursive-descent parser to check the syntax of the test program.
@@ -59,17 +66,11 @@ void lexicalAnalyzer() {
 }
 
 bool isOperator(string input) {
-    if (input == "+" || input == "-" || input == "/" || input == "%" || input == "*" || input == "=")
-        return false;
+    return (input == "+" || input == "-" || input == "/" || input == "%" || input == "*" || input == "=");
 }
 
 bool isKeyword(string input) {
-    if ((input == "int") || (input == "string") || (input == "double") || (input == "bool")) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    return ((input == "int") || (input == "string") || (input == "double") || (input == "bool") || (input == "float") || (input == "char"));
 }
 
 string punctuatorFind(string input) {
@@ -84,7 +85,7 @@ string punctuatorFind(string input) {
 }
 
 void topDownParser() {
-  
+
 }
 
 void readFile(string fileName) {
@@ -102,7 +103,7 @@ void readFile(string fileName) {
 }
 
 void tempTest() {
-     for (int i = 0; i < wordList.size() - 1; i++) {
+    for (int i = 0; i < wordList.size() - 1; i++) {
         cout << wordList[i] << endl;
     }
 }
