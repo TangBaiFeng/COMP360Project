@@ -15,13 +15,18 @@ using namespace std;
  *
  */
 void lexicalAnalyzer();
-
-bool isOperator(string input);  // Checks if string is an operator
-
-bool isKeyword(string input);   // Checks if string is a keyword
+/**
+ * @brief Checks if string is an operator
+ * @return true if *, /, +, -, =, %
+ */
+bool isOperator(string input);
+/**
+ * @brief Checks if string is a keyword
+ * @return true if it is a primitive type
+ */
+bool isKeyword(string input);
 /**
  * @brief Iterates through string and pulls out punctuation
- *
  * @param input unclean string
  * @return cleaned string
  */
