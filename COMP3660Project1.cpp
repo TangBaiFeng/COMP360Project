@@ -26,12 +26,10 @@ bool isOperator(string input);
  */
 bool isKeyword(string input);
 /**
- * @brief Iterates through string and pulls out punctuation
- * @param input unclean string
- * @return cleaned string
+ * @brief Checks if char is punctuation
+ * @return true
  */
-string punctuatorFind(string input); // 
-
+bool isPunctuation(char i);
 /**
  * @brief recursive-descent parser to check the syntax of the test program.
  *
@@ -44,12 +42,14 @@ void topDownParser();
  */
 void readFile(string fileName);
 
+void tempTest();
+
 // List of words broken up by the readFile
 vector <string> wordList;
 int main(int argc, char const* argv[]) {
     /* code */
     readFile("test1.txt");
-    //tempTest();
+    // tempTest();
     lexicalAnalyzer();
     return 0;
 }
@@ -57,12 +57,15 @@ int main(int argc, char const* argv[]) {
 void lexicalAnalyzer() {
     string analyze;
     for (int i = 0; i < wordList.size() - 1; i++) {
-        analyze = punctuatorFind(wordList[i]);
-        if (isKeyword(analyze) == true) {
+        analyze = wordList[i];
+        if (isKeyword(analyze)) {
             cout << analyze << " is a keyword." << endl;
         }
-        else if (isOperator(analyze) == true) {
+        else if (isOperator(analyze)) {
             cout << analyze << " is an operator." << endl;
+        }
+        else if (isPunctuation(analyze[0])) {
+            cout << analyze << " is a punctuator." << endl;
         }
         else if (isalpha(analyze[0])) {
             cout << analyze << " is an identifier." << endl;
@@ -77,16 +80,9 @@ bool isOperator(string input) {
 bool isKeyword(string input) {
     return ((input == "int") || (input == "string") || (input == "double") || (input == "bool") || (input == "float") || (input == "char"));
 }
-
-string punctuatorFind(string input) {
-    for (int i = 0; i < input.size() - 1; i++) {
-        if ((input[i] == '{') || (input[i] == '}') || (input[i] == '(') || (input[i] == ')') ||
-            (input[i] == '&') || (input[i] == '|')) {
-            cout << input[i] << " is a punctuator." << endl;
-            input.erase(input.begin() + i);
-        }
-        return input;
-    }
+bool isPunctuation(char i) {
+    return ((i == '{') || (i == '}') || (i == '(') || (i == ')') ||
+        (i == '&') || (i == '|') || (i == ';'));
 }
 
 void topDownParser() {
@@ -95,10 +91,33 @@ void topDownParser() {
 
 void readFile(string fileName) {
     string line;
+    vector<int> position;
     ifstream myFile(fileName);
     if (myFile.is_open()) {
         while (getline(myFile, line, ' ')) {
-            wordList.push_back(line);
+            int i = 0;
+            int newLinePos = line.find("\n");
+            if (newLinePos != string::npos) {
+                line.erase(newLinePos, 1);
+            }
+            while (i < line.size()) {
+                if (isPunctuation(line[i]) && i == 0) {
+                    wordList.push_back(line.substr(0, 1));
+                    line.erase(0, 1);
+                }
+                else if (isPunctuation(line[i])) {
+                    wordList.push_back(line.substr(0, i));
+                    line.erase(0, i);
+                    i = 0;
+                }
+                else {
+                    i++;
+                }
+            }
+            if (line.length() != 0) {
+                wordList.push_back(line);
+            }
+
         }
     }
     else {
