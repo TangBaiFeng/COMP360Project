@@ -1,6 +1,6 @@
 /**
  * @brief We will input a file, identify the substrings and find all syntax errors
- * @author Stephen Witley???
+ * @author Stephen Whitley
  * @author Troy Boone
  *
  */
@@ -74,7 +74,7 @@ void lexicalAnalyzer() {
 }
 
 bool isOperator(string input) {
-    return (input == "+" || input == "-" || input == "/" || input == "%" || input == "*" || input == "=");
+    return ((input == "+") || (input == "-") || (input == "/") || (input == "%") || (input == "*") || (input == "="));
 }
 
 bool isKeyword(string input) {
