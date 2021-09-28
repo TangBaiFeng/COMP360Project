@@ -45,13 +45,15 @@ void readFile(string fileName);
 
 void tempTest();
 
+void error(string errorMessage);
+
 // List of words broken up by the readFile
 vector <string> wordList;
 
 vector<string> idents;
 int main(int argc, char const* argv[]) {
     /* code */
-    readFile("test2.txt");
+    readFile("test1.txt");
     // tempTest();
     lexicalAnalyzer();
     return 0;
@@ -68,9 +70,16 @@ void lexicalAnalyzer() {
 
         }
         else if (isOperator(analyze)) {
+            if (keywordFlag) {
+                error(analyze);
+            }
             cout << analyze << " is an operator." << endl;
         }
         else if (isPunctuation(analyze[0])) {
+            if (keywordFlag) {
+                error(analyze);
+            }
+
             cout << analyze << " is a punctuator." << endl;
         }
         else if (isalpha(analyze[0])) {
@@ -80,8 +89,7 @@ void lexicalAnalyzer() {
             }
             else {
                 if (find(idents.begin(), idents.end(), analyze) == idents.end()) {
-                    cout << analyze << " Is improper" << endl;
-                    exit(1);
+                    error(analyze);
                 }
             }
 
@@ -149,6 +157,11 @@ void tempTest() {
     for (int i = 0; i < wordList.size() - 1; i++) {
         cout << wordList[i] << endl;
     }
+}
+
+void error(string errorString) {
+    cout << errorString << " Is improper" << endl;
+    exit(1);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
