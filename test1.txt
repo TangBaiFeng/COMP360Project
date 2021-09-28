@@ -1,5 +1,6 @@
 int test1 (int m){
 int p;
+int n;
 int res;
 res = n / p * m;
 }

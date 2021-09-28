@@ -8,6 +8,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 /**
@@ -50,7 +51,7 @@ vector <string> wordList;
 vector<string> idents;
 int main(int argc, char const* argv[]) {
     /* code */
-    readFile("test1.txt");
+    readFile("test2.txt");
     // tempTest();
     lexicalAnalyzer();
     return 0;
@@ -58,11 +59,12 @@ int main(int argc, char const* argv[]) {
 
 void lexicalAnalyzer() {
     string analyze;
+    bool keywordFlag = false;
     for (int i = 0; i < wordList.size() - 1; i++) {
         analyze = wordList[i];
         if (isKeyword(analyze)) {
             cout << analyze << " is a keyword." << endl;
-            //triggers keyword flag
+            keywordFlag = true;
 
         }
         else if (isOperator(analyze)) {
@@ -72,6 +74,17 @@ void lexicalAnalyzer() {
             cout << analyze << " is a punctuator." << endl;
         }
         else if (isalpha(analyze[0])) {
+            if (keywordFlag) {
+                idents.push_back(analyze);
+                keywordFlag = false;
+            }
+            else {
+                if (find(idents.begin(), idents.end(), analyze) == idents.end()) {
+                    cout << analyze << " Is improper" << endl;
+                    exit(1);
+                }
+            }
+
             cout << analyze << " is an identifier." << endl;
             //if followed after keyword, add to ident. If not followed by keyword, check if in ident list. if not in ident list, error
             //triggers ident flag
