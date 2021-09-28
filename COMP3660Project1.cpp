@@ -46,6 +46,8 @@ void tempTest();
 
 // List of words broken up by the readFile
 vector <string> wordList;
+
+vector<string> idents;
 int main(int argc, char const* argv[]) {
     /* code */
     readFile("test1.txt");
@@ -60,6 +62,8 @@ void lexicalAnalyzer() {
         analyze = wordList[i];
         if (isKeyword(analyze)) {
             cout << analyze << " is a keyword." << endl;
+            //triggers keyword flag
+
         }
         else if (isOperator(analyze)) {
             cout << analyze << " is an operator." << endl;
@@ -69,6 +73,8 @@ void lexicalAnalyzer() {
         }
         else if (isalpha(analyze[0])) {
             cout << analyze << " is an identifier." << endl;
+            //if followed after keyword, add to ident. If not followed by keyword, check if in ident list. if not in ident list, error
+            //triggers ident flag
         }
     }
 }
