@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <map>
 
 using namespace std;
 /**
@@ -51,54 +52,117 @@ void error(string errorMessage);
 vector <string> wordList;
 
 vector<string> idents;
+
+enum Lexume { Keyword, Operator, Punctuator, Identifier };
+map<int, pair<Lexume, string>> lexicalReturn;
 int main(int argc, char const* argv[]) {
     /* code */
-    readFile("test1.txt");
+    readFile("test2.txt");
     // tempTest();
     lexicalAnalyzer();
+    topDownParser();
     return 0;
 }
 
 void lexicalAnalyzer() {
     string analyze;
-    bool keywordFlag = false;
-    for (int i = 0; i < wordList.size() - 1; i++) {
+    for (int i = 0; i < wordList.size(); i++) {
         analyze = wordList[i];
         if (isKeyword(analyze)) {
             cout << analyze << " is a keyword." << endl;
-            keywordFlag = true;
-
+            lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Keyword, analyze)));
         }
         else if (isOperator(analyze)) {
-            if (keywordFlag) {
-                error(analyze);
-            }
             cout << analyze << " is an operator." << endl;
+            lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Operator, analyze)));
         }
         else if (isPunctuation(analyze[0])) {
-            if (keywordFlag) {
-                error(analyze);
-            }
-
             cout << analyze << " is a punctuator." << endl;
+            lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Punctuator, analyze)));
         }
         else if (isalpha(analyze[0])) {
-            if (keywordFlag) {
-                idents.push_back(analyze);
-                keywordFlag = false;
-            }
-            else {
-                if (find(idents.begin(), idents.end(), analyze) == idents.end()) {
-                    error(analyze);
-                }
-            }
-
             cout << analyze << " is an identifier." << endl;
-            //if followed after keyword, add to ident. If not followed by keyword, check if in ident list. if not in ident list, error
-            //triggers ident flag
+            lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Identifier, analyze)));
         }
     }
 }
+// void topDownParser() {
+//     bool keywordFlag = false;
+//     bool operatorFlag = false;
+//     for (auto x : lexicalReturn) {
+//         if (isKeyword(x.second) && !operatorFlag) {
+//             keywordFlag = true;
+//         }
+//         else if (isOperator(x.second) && !keywordFlag && !operatorFlag) {
+//             operatorFlag = true;
+//         }
+//         else if (isPunctuation(x.second[0]) && !keywordFlag && !operatorFlag) {
+
+//         }
+//         else if (isalpha(x.second[0])) {
+//             if (keywordFlag) {
+//                 idents.push_back(x.second);
+//                 keywordFlag = false;
+//             }
+//             else {
+//                 if (find(idents.begin(), idents.end(), x.second) == idents.end()) {
+//                     error(x.second);
+//                 }
+//                 operatorFlag = false;
+//             }
+//         }
+//     }
+
+// }
+
+void topDownParser() {
+    //Program start
+    if (lexicalReturn.at(0).first != Keyword) error(lexicalReturn.at(0).second);
+    if (lexicalReturn.at(1).first != Identifier) error(lexicalReturn.at(1).second);
+    if (lexicalReturn.at(2).first != Punctuator) error(lexicalReturn.at(2).second);
+    if (lexicalReturn.at(3).first != Keyword) error(lexicalReturn.at(3).second);
+    if (lexicalReturn.at(4).first != Identifier) error(lexicalReturn.at(4).second);
+    if (lexicalReturn.at(5).first != Punctuator) error(lexicalReturn.at(5).second);
+    if (lexicalReturn.at(6).first != Punctuator) error(lexicalReturn.at(6).second);
+
+    bool declare = true;
+    bool expr = true;
+    int counter = 7;
+
+    while (declare) {
+        if (lexicalReturn.at(counter).first != Keyword) error(lexicalReturn.at(counter).second);
+        if (lexicalReturn.at(counter + 1).first != Identifier) error(lexicalReturn.at(counter + 1).second);
+        if (lexicalReturn.at(counter + 2).first != Punctuator) error(lexicalReturn.at(counter + 2).second);
+
+        if (lexicalReturn.at(counter + 3).first != Keyword) declare = false;
+        counter += 3;
+
+    }
+    if (lexicalReturn.at(counter).first != Identifier) error(lexicalReturn.at(counter).second);
+    counter++;
+    if (lexicalReturn.at(counter).first != Operator) error(lexicalReturn.at(counter).second);
+    counter++;
+
+    while (expr) {
+        if (lexicalReturn.at(counter).first != Identifier) error(lexicalReturn.at(counter).second);
+        if (lexicalReturn.at(counter + 1).first != Operator) {
+            expr = false;
+            counter++;
+        }
+        else {
+            counter += 2;
+        }
+
+    }
+    if (lexicalReturn.at(counter).first != Punctuator) error(lexicalReturn.at(counter).second);
+    counter++;
+    if (lexicalReturn.at(counter).first != Punctuator) error(lexicalReturn.at(counter).second);
+
+    cout << "The test program is generated by the BNF grammar" << endl;
+}
+
+
+
 
 bool isOperator(string input) {
     return ((input == "+") || (input == "-") || (input == "/") || (input == "%") || (input == "*") || (input == "="));
@@ -110,10 +174,6 @@ bool isKeyword(string input) {
 bool isPunctuation(char i) {
     return ((i == '{') || (i == '}') || (i == '(') || (i == ')') ||
         (i == '&') || (i == '|') || (i == ';'));
-}
-
-void topDownParser() {
-
 }
 
 void readFile(string fileName) {
@@ -160,7 +220,9 @@ void tempTest() {
 }
 
 void error(string errorString) {
-    cout << errorString << " Is improper" << endl;
+    cout << "The test program cannot be generated
+        by the Simple Demo Function BNF Grammar"<< endl;
+        cout << errorString << " Is improper" << endl;
     exit(1);
 }
 
