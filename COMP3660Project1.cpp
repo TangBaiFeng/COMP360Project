@@ -46,7 +46,7 @@ void topDownParser();
 void readFile(string fileName);
 /**
  * @brief Prints out a syntax error if the top-down parser detects a problem within the EBNF
- * 
+ *
  * @param errorMessage from topDownParser()
  */
 void error(string errorMessage);
@@ -65,9 +65,10 @@ enum Lexume { Keyword, Operator, Punctuator, Identifier };
 map<int, pair<Lexume, string>> lexicalReturn;
 int main() {
     /* code */
-    cout << "Input file name (Example.txt):";
-    cin >> fileName;
-    readFile(fileName);
+    // cout << "Input file name (Example.txt):";
+    // cin >> fileName;
+    // readFile(fileName);
+    readFile("test1.txt");
     lexicalAnalyzer();
     topDownParser();
     return 0;
@@ -78,19 +79,19 @@ void lexicalAnalyzer() {
     for (int i = 0; i < wordList.size(); i++) { // Loop that goes through the entire wordList.
         analyze = wordList[i];
         if (isKeyword(analyze)) {   // The process of determining what category each token from the wordList goes into.
-            cout << analyze << " is a keyword. \n";
+            cout << analyze << "  -> " << "Keyword" << endl;
             lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Keyword, analyze)));
         }
         else if (isOperator(analyze)) {
-            cout << analyze << " is an operator." << endl;
+            cout << analyze << "    -> " << "Operator" << endl;
             lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Operator, analyze)));
         }
         else if (isPunctuation(analyze[0])) {
-            cout << analyze << " is a punctuator." << endl;
+            cout << analyze << "    -> " << "Punctuator" << endl;
             lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Punctuator, analyze)));
         }
         else if (isalpha(analyze[0])) {
-            cout << analyze << " is an identifier." << endl;
+            cout << analyze << "    -> " << "Identifier" << endl;
             lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Identifier, analyze)));
         }
     }
@@ -127,12 +128,21 @@ void lexicalAnalyzer() {
 void topDownParser() {
     //Program start
     //Determines whether or not the function is valid based off the EBNF Grammar provided in the sample demo.
-    if (lexicalReturn.at(0).first != Keyword) error(lexicalReturn.at(0).second);    
-    if (lexicalReturn.at(1).first != Identifier) error(lexicalReturn.at(1).second);
+    if (lexicalReturn.at(0).first != Keyword) error(lexicalReturn.at(0).second);
+    if (lexicalReturn.at(1).first != Identifier) {
+        error(lexicalReturn.at(1).second);
+    }
+    else {
+        idents.push_back(lexicalReturn.at(1).second);
+    }
     if (lexicalReturn.at(2).first != Punctuator) error(lexicalReturn.at(2).second);
     if (lexicalReturn.at(3).first != Keyword) error(lexicalReturn.at(3).second);
-    if (lexicalReturn.at(4).first != Identifier) error(lexicalReturn.at(4).second);
-    if (lexicalReturn.at(5).first != Punctuator) error(lexicalReturn.at(5).second);
+    if (lexicalReturn.at(4).first != Identifier) {
+        error(lexicalReturn.at(4).second);
+    }
+    else {
+        idents.push_back(lexicalReturn.at(4).second);
+    }    if (lexicalReturn.at(5).first != Punctuator) error(lexicalReturn.at(5).second);
     if (lexicalReturn.at(6).first != Punctuator) error(lexicalReturn.at(6).second);
 
     bool declare = true;
@@ -142,20 +152,39 @@ void topDownParser() {
     while (declare) {   // Checks if all initialized variables are valid. 
                         // Ends if there are no more variables intialized ahead
         if (lexicalReturn.at(counter).first != Keyword) error(lexicalReturn.at(counter).second);
-        if (lexicalReturn.at(counter + 1).first != Identifier) error(lexicalReturn.at(counter + 1).second);
+        if (lexicalReturn.at(counter + 1).first != Identifier) {
+            error(lexicalReturn.at(counter + 1).second);
+        }
+        else {
+            idents.push_back(lexicalReturn.at(counter + 1).second);
+        }
         if (lexicalReturn.at(counter + 2).first != Punctuator) error(lexicalReturn.at(counter + 2).second);
 
         if (lexicalReturn.at(counter + 3).first != Keyword) declare = false;
         counter += 3;
 
     }
-    if (lexicalReturn.at(counter).first != Identifier) error(lexicalReturn.at(counter).second);
+    if (lexicalReturn.at(counter).first != Identifier) {
+        error(lexicalReturn.at(counter).second);
+    }
+    else {
+        if (find(idents.begin(), idents.end(), lexicalReturn.at(counter).second) == idents.end()) {
+            error(lexicalReturn.at(counter).second);
+        }
+    }
     counter++;
     if (lexicalReturn.at(counter).first != Operator) error(lexicalReturn.at(counter).second);
     counter++;
 
     while (expr) {
-        if (lexicalReturn.at(counter).first != Identifier) error(lexicalReturn.at(counter).second);
+        if (lexicalReturn.at(counter).first != Identifier) {
+            error(lexicalReturn.at(counter).second);
+        }
+        else {
+            if (find(idents.begin(), idents.end(), lexicalReturn.at(counter).second) == idents.end()) {
+                error(lexicalReturn.at(counter).second);
+            }
+        }
         if (lexicalReturn.at(counter + 1).first != Operator) {
             expr = false;
             counter++;
@@ -231,8 +260,8 @@ void tempTest() {
 }
 
 void error(string errorString) {
-    cout << "The test program cannot be generated by the Simple Demo Function BNF Grammar"<< endl;
-        cout << errorString << " Is improper" << endl;
+    cout << "The test program cannot be generated by the Simple Demo Function BNF Grammar" << endl;
+    cout << errorString << " Is improper" << endl;
     exit(1);
 }
 
