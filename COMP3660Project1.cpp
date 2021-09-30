@@ -1,10 +1,10 @@
 /**
- * @brief We will input a file, identify the substrings and find all syntax errors
+ * @brief We will input a file and parse the file and split it into logical tokens. The lexical analyser will then assign Lexemes to these tokens, and finally the top down parser will determine if the statement is valid using the grammer given
  * @author Stephen Whitley
  * @author Troy Boone
  *
  */
-#include <iostream>
+#include <iostream> 
 #include <fstream>
 #include <string>
 #include <vector>
@@ -33,7 +33,7 @@ bool isKeyword(string input);
  */
 bool isPunctuation(char i);
 /**
- * @brief recursive-descent parser to check the syntax of the test program.
+ * @brief recursive-descent parser to check the syntax of the test program. If at any point the parser receives an input it was not expecting, error() will be called with the offending token
  *
  */
 void topDownParser();
@@ -60,8 +60,8 @@ vector <string> wordList;
 vector<string> idents;
 
 // Stores each type of token in an enumerator
-enum Lexume { Keyword, Operator, Punctuator, Identifier };
-map<int, pair<Lexume, string>> lexicalReturn;
+enum Lexeme { Keyword, Operator, Punctuator, Identifier };
+map<int, pair<Lexeme, string>> lexicalReturn;
 int main() {
     /* code */
     cout << "Input file name (Example.txt):";
@@ -78,19 +78,19 @@ void lexicalAnalyzer() {
         analyze = wordList[i];
         if (isKeyword(analyze)) {   // The process of determining what category each token from the wordList goes into.
             cout << analyze << "  -> " << "Keyword" << endl;
-            lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Keyword, analyze)));
+            lexicalReturn.insert(pair<int, pair<Lexeme, string>>(i, pair<Lexeme, string>(Keyword, analyze)));
         }
         else if (isOperator(analyze)) {
             cout << analyze << "    -> " << "Operator" << endl;
-            lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Operator, analyze)));
+            lexicalReturn.insert(pair<int, pair<Lexeme, string>>(i, pair<Lexeme, string>(Operator, analyze)));
         }
         else if (isPunctuation(analyze[0])) {
             cout << analyze << "    -> " << "Punctuator" << endl;
-            lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Punctuator, analyze)));
+            lexicalReturn.insert(pair<int, pair<Lexeme, string>>(i, pair<Lexeme, string>(Punctuator, analyze)));
         }
         else if (isalpha(analyze[0])) {
             cout << analyze << "    -> " << "Identifier" << endl;
-            lexicalReturn.insert(pair<int, pair<Lexume, string>>(i, pair<Lexume, string>(Identifier, analyze)));
+            lexicalReturn.insert(pair<int, pair<Lexeme, string>>(i, pair<Lexeme, string>(Identifier, analyze)));
         }
     }
 }
@@ -98,7 +98,7 @@ void lexicalAnalyzer() {
 void topDownParser() {
     //Program start
     //Determines whether or not the function is valid based off the EBNF Grammar provided in the sample demo.
-    string compare = "(";
+    //Handles the Header of the program <keyword> <ident> (<keyword><ident>) { 
     if (lexicalReturn.at(0).first != Keyword) error(lexicalReturn.at(0).second);
     if (lexicalReturn.at(1).first != Identifier) {
         error(lexicalReturn.at(1).second);
@@ -106,7 +106,7 @@ void topDownParser() {
     else {
         idents.push_back(lexicalReturn.at(1).second);
     }
-    if (lexicalReturn.at(2).second != "(") error(lexicalReturn.at(2).second);    
+    if (lexicalReturn.at(2).second != "(") error(lexicalReturn.at(2).second);
     if (lexicalReturn.at(3).first != Keyword) error(lexicalReturn.at(3).second);
     if (lexicalReturn.at(4).first != Identifier) {
         error(lexicalReturn.at(4).second);
@@ -116,12 +116,13 @@ void topDownParser() {
     }    if (lexicalReturn.at(5).second != ")") error(lexicalReturn.at(5).second);
     if (lexicalReturn.at(6).second != "{") error(lexicalReturn.at(6).second);
 
-    bool declare = true;
-    bool expr = true;
+    bool declare = true; // Loop to maintain the declare loop
+    bool expr = true; // Loop to maintain the expr loop 
     int counter = 7;
-
+    // Start of the body
     while (declare) {   // Checks if all initialized variables are valid. 
-                        // Ends if there are no more variables intialized ahead
+                        // Ends if there are no more variables intialized ahead 
+                        // <declares> -> <keyword><ident>; | <keyword><ident>; <declares>
         if (lexicalReturn.at(counter).first != Keyword) error(lexicalReturn.at(counter).second);
         if (lexicalReturn.at(counter + 1).first != Identifier) {
             error(lexicalReturn.at(counter + 1).second);
@@ -130,11 +131,13 @@ void topDownParser() {
             idents.push_back(lexicalReturn.at(counter + 1).second);
         }
         if (lexicalReturn.at(counter + 2).second != ";") error(lexicalReturn.at(counter + 2).second);
-
+        //If the next item is detected as not a keyword, the declare loop is over
         if (lexicalReturn.at(counter + 3).first != Keyword) declare = false;
         counter += 3;
 
     }
+    // assign start
+    // <assign> -> <ident> = <expr>
     if (lexicalReturn.at(counter).first != Identifier) {
         error(lexicalReturn.at(counter).second);
     }
@@ -144,10 +147,11 @@ void topDownParser() {
         }
     }
     counter++;
-    if (lexicalReturn.at(counter).first != Operator) error(lexicalReturn.at(counter).second);
+    if (lexicalReturn.at(counter).second != "=") error(lexicalReturn.at(counter).second);
     counter++;
 
     while (expr) {
+        // <expr> -> <ident> {/|*} <expr> | <ident>
         if (lexicalReturn.at(counter).first != Identifier) {
             error(lexicalReturn.at(counter).second);
         }
@@ -156,6 +160,7 @@ void topDownParser() {
                 error(lexicalReturn.at(counter).second);
             }
         }
+        // If the next item is detected as not an operator, end the loop
         if (lexicalReturn.at(counter + 1).first != Operator) {
             expr = false;
             counter++;
@@ -165,6 +170,7 @@ void topDownParser() {
         }
 
     }
+    // Wrapping up the end of <assign> and <body> 
     if (lexicalReturn.at(counter).second != ";") error(lexicalReturn.at(counter).second);
     counter++;
     if (lexicalReturn.at(counter).second != "}") error(lexicalReturn.at(counter).second);
